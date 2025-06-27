@@ -15,10 +15,7 @@ A real-time safety-critical ADAS prototype built using:
 
 ## Tools Used
 - STM32CubeIDE
-- SEGGER SystemView (optional)
+- SEGGER SystemView
 - GitHub for version control
 
-## Getting Started
-1. Clone this repo
-2. Open `.ioc` file with STM32CubeIDE
-3. Build and flash to Nucleo-F446RE
+
