@@ -49,11 +49,11 @@ I2C_HandleTypeDef hi2c1;
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
-uint16_t yaw_raw;
 float yaw_dps;
 
 TaskHandle_t taskhandle1;
 TaskHandle_t taskhandle2;
+TaskHandle_t taskhandle3;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -65,6 +65,7 @@ static void MX_USART2_UART_Init(void);
 void initfunc (void *paramters);
 void taskfunc1 (void *parameters);
 void taskfunc2 (void *parameters);
+void taskfunc3(void *parameters);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -106,6 +107,8 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
   //initialisation task
+
+  printf("Initialisation done.");
   xTaskCreate(initfunc, "mpuinit", 200, NULL, 2, NULL);
   //task 1 priivileged
 
@@ -113,6 +116,9 @@ int main(void)
   // task 2 control unit privileged
 
   xTaskCreate(taskfunc2, "control unit", 200, NULL, 2, &taskhandle2);
+
+  //task 3 logger task
+  xTaskCreate(taskfunc3,"logger",200,NULL,2,&taskhandle3);
   vTaskStartScheduler();
 
 
@@ -284,6 +290,7 @@ static void MX_GPIO_Init(void)
 void initfunc (void *parameters)
 
 	{
+
 		mpuint(NULL);
 
 		vTaskDelete(NULL);
@@ -303,6 +310,14 @@ void taskfunc2(void *parameters)
 	while (1)
 	{
 	controlunit();
+	vTaskDelay(100);
+	}
+}
+void taskfunc3(void *parameters)
+{
+	while (1)
+	{
+	logger();
 	vTaskDelay(100);
 	}
 }

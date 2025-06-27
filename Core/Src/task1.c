@@ -24,7 +24,7 @@ uint8_t txbuffread[30]="yaw read!\n\r";
 uint8_t config=0x08;
 uint8_t sleep=0x00;
 uint8_t readbuffer[2];
-extern uint16_t yaw_raw;
+uint16_t yaw_raw;
 
 extern float yaw_dps;
 float steerinput=50.0f;
@@ -58,6 +58,7 @@ void mpuint(void *params)
 	   	   if(ret1==HAL_OK)
 	   	   {
 	   		   HAL_UART_Transmit(&huart2,txbuffsuc2,30,10);
+	   		HAL_Delay(1000);
 	   	   }
 	   	   else
 	   	   {
@@ -77,7 +78,9 @@ void mpuread(void *params)
 
 		printf("Yaw raw value: %d\r\n",yaw_raw);
 
+
 		printf("Yaw value: %f\r\n",yaw_dps);
+
 
 	}
 
@@ -100,5 +103,11 @@ void controlunit (void)
 		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
 		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_5, GPIO_PIN_SET);
 	}
+}
+
+void logger (void)
+{
+	float yaw_read = yaw_dps;
+	printf("The value logged successfully!");
 }
 
